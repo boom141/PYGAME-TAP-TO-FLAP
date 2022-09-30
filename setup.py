@@ -9,9 +9,10 @@ FPS = 60
 
 window = pygame.display.set_mode(RESOLUTION)
 
-display = pygame.Surface((300,300))
+display = pygame.Surface((500,500))
 
 pygame.display.set_caption('Pygame: Tap To Flap')
 
 clock = pygame.time.Clock()
+
 
