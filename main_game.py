@@ -3,18 +3,22 @@ from setup import*
 from sprite_groups import*
 from environment import*
 from player import*
-
+from instruction_ui import*
 
 def game():
 	last_time = time.time()
 	running = True
+	instruction = True
 
 	player = Player('brian')
-	pipe = Pipes(1,[510, int(130 + random.randint(1,12) * 10)])
+	pipe = Pipes(1,[550, int(130 + random.randint(1,12) * 10)],1)
 	pipes.add(pipe)
 	ground = Ground(1,0)
 	grounds.add(ground)
-
+	instruction = Instruction('brian')
+	
+	slide_value = 1.5
+	
 	while running:
 		delta_time = time.time() - last_time
 		delta_time *= 60
@@ -22,21 +26,30 @@ def game():
 		
 		display.fill((25,25,25))
 		
-# slide --------------------------------------------------------------------------#
+# slide ------------------------------  --------------------------------------------#
 		horizontal_scroll = 0
-		horizontal_scroll -= 1.5 * delta_time 
+		horizontal_scroll -= slide_value * delta_time 
 
+		if instruction == False:
+			for pipe in pipes:
+				pipe.update(horizontal_scroll)
+				if pipe.collision(player):
+					slide_value = 0
+				pipe.points(player)
+				pipe.draw(display)
 
-		for pipe in pipes:
-			pipe.update(horizontal_scroll)
-			pipe.collision(player)
-			pipe.draw(display)
+			player.update(delta_time)
+			player.draw(display)
 
-		grounds.update(1,horizontal_scroll)
-		grounds.draw(display)
-
-		player.update(delta_time)
-		player.draw(display)
+			grounds.update(horizontal_scroll)
+			grounds.draw(display)
+		else:
+			instruction.draw(display,delta_time)
+			grounds.update(horizontal_scroll)
+			grounds.draw(display)
+		
+		if pygame.key.get_pressed()[K_SPACE]:
+			instruction = False
 		
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
