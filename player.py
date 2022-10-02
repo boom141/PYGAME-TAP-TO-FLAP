@@ -21,7 +21,7 @@ class Player(pygame.sprite.Sprite):
         self.hit = False
         self.state = 'flying'
         self.score = 0
-        self.font = pygame.font.Font(os.path.join('fonts','digitalix.ttf'),45)
+        self.font = pygame.font.Font(os.path.join('fonts','04B_19__.TTF'),45)
 
     def fly(self,delta_time):
         if self.jump_cooldown > 0:

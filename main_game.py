@@ -15,9 +15,22 @@ def game():
 	pipes.add(pipe)
 	ground = Ground(1,0)
 	grounds.add(ground)
+	
+	main_bg = pygame.image.load(os.path.join('bg','main.png'))
+
+	layer3 = Layer3(1,[0,100])
+	mt.add(layer3)
+
+	layer2 = Layer2(1,[0,190])
+	layers.add(layer2)
+
+	layer1 = Layer1(1,[0,230])
+	layers.add(layer1)
+
 	instruction = Instruction('brian')
 	
-	slide_value = 1.5
+
+	slide_value = 2
 	
 	while running:
 		delta_time = time.time() - last_time
@@ -30,6 +43,17 @@ def game():
 		horizontal_scroll = 0
 		horizontal_scroll -= slide_value * delta_time 
 
+		display.blit(main_bg,(0,0))
+		
+		for m in mt:
+			m.update(horizontal_scroll)
+			m.draw(display) 
+		
+		for bg in layers:
+			bg.update(horizontal_scroll)
+			bg.draw(display)
+		
+		
 		if instruction == False:
 			for pipe in pipes:
 				pipe.update(horizontal_scroll)
@@ -43,6 +67,7 @@ def game():
 
 			grounds.update(horizontal_scroll)
 			grounds.draw(display)
+			
 		else:
 			instruction.draw(display,delta_time)
 			grounds.update(horizontal_scroll)

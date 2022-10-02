@@ -61,4 +61,73 @@ class Pipes(pygame.sprite.Sprite):
         # pygame.draw.rect(surface, 'green', self.lower_pipe_rect, 1)
         surface.blit(self.upper_pipe,(self.upper_pipe_rect.x,self.upper_pipe_rect.y))
         surface.blit(self.lower_pipe,(self.lower_pipe_rect.x,self.lower_pipe_rect.y))
+
+
+
+
+class Layer3(pygame.sprite.Sprite):
+    def __init__(self,theme,position):
+        pygame.sprite.Sprite.__init__(self)
+        self.theme = theme
+        self.layer3 = pygame.image.load(os.path.join('bg','layer3.png'))
+        self.layer3_rect = self.layer3.get_rect(x=position[0],y=position[1])
+        self.spawn = -1
         
+    def update(self,horizontal_scroll):
+        self.layer3_rect.right += horizontal_scroll / 3
+        if self.layer3_rect.left < 0 and self.spawn == -1:
+            self.spawn = 0
+            layer3 = Layer3(self.theme,[self.layer3_rect.right,self.layer3_rect.y])
+            mt.add(layer3)
+
+        if self.layer3_rect.right < 0:
+            self.kill()
+
+    def draw(self,surface):
+        surface.blit(self.layer3, self.layer3_rect)
+
+
+
+class Layer2(pygame.sprite.Sprite):
+    def __init__(self,theme,position):
+        pygame.sprite.Sprite.__init__(self)
+        self.theme = theme
+        self.position = position
+        self.layer2 = pygame.image.load(os.path.join('bg','layer2.png'))
+        self.layer2_rect = self.layer2.get_rect(x=position[0],y=position[1])
+        self.spawn = -1
+        
+    def update(self,horizontal_scroll):
+        self.layer2_rect.right += horizontal_scroll / 2
+        if self.layer2_rect.left < 0 and self.spawn == -1:
+            self.spawn = 0
+            layer2 = Layer2(self.theme,[self.layer2_rect.right,self.layer2_rect.y])
+            layers.add(layer2)
+
+        if self.layer2_rect.right < 0:
+            self.kill()
+
+    def draw(self,surface):
+        surface.blit(self.layer2, self.layer2_rect)
+
+
+class Layer1(pygame.sprite.Sprite):
+    def __init__(self,theme,position):
+        pygame.sprite.Sprite.__init__(self)
+        self.theme = theme
+        self.layer1 = pygame.image.load(os.path.join('bg','layer1.png'))
+        self.layer1_rect = self.layer1.get_rect(x=position[0],y=position[1])
+        self.spawn = -1
+        
+    def update(self,horizontal_scroll):
+        self.layer1_rect.right += horizontal_scroll
+        if self.layer1_rect.left < 0 and self.spawn == -1:
+            self.spawn = 0
+            layer1 = Layer1(self.theme,[self.layer1_rect.right,self.layer1_rect.y])
+            layers.add(layer1)
+
+        if self.layer1_rect.right < 0:
+            self.kill()
+
+    def draw(self,surface):
+        surface.blit(self.layer1, self.layer1_rect)
