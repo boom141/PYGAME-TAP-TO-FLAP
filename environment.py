@@ -1,5 +1,6 @@
 import random
 from setup import*
+from sound_music import Sfx_Sound
 from sprite_groups import*
 
 class Ground(pygame.sprite.Sprite):
@@ -31,6 +32,7 @@ class Pipes(pygame.sprite.Sprite):
         self.spawn = -1
         self.score = 0
         self.font = pygame.font.Font(os.path.join('fonts','digitalix.ttf'),30)
+        self.sounds = -1
 
 
     def collision(self,player):
@@ -41,7 +43,9 @@ class Pipes(pygame.sprite.Sprite):
        
     
     def points(self,player):
-        if player.rect.left > self.upper_pipe_rect.right:
+        if player.rect.left > self.upper_pipe_rect.right and self.sounds == -1:
+            self.sounds = 0
+            Sfx_Sound('sounds/points1.wav').play_sound(0)
             player.score = self.pipe_num
 
     def update(self,horizontal_scroll):
@@ -78,7 +82,7 @@ class Layer3(pygame.sprite.Sprite):
         if self.layer3_rect.left < 0 and self.spawn == -1:
             self.spawn = 0
             layer3 = Layer3(self.theme,[self.layer3_rect.right,self.layer3_rect.y])
-            mt.add(layer3)
+            layers[0].add(layer3)
 
         if self.layer3_rect.right < 0:
             self.kill()
@@ -102,7 +106,7 @@ class Layer2(pygame.sprite.Sprite):
         if self.layer2_rect.left < 0 and self.spawn == -1:
             self.spawn = 0
             layer2 = Layer2(self.theme,[self.layer2_rect.right,self.layer2_rect.y])
-            layers.add(layer2)
+            layers[1].add(layer2)
 
         if self.layer2_rect.right < 0:
             self.kill()
@@ -124,7 +128,7 @@ class Layer1(pygame.sprite.Sprite):
         if self.layer1_rect.left < 0 and self.spawn == -1:
             self.spawn = 0
             layer1 = Layer1(self.theme,[self.layer1_rect.right,self.layer1_rect.y])
-            layers.add(layer1)
+            layers[2].add(layer1)
 
         if self.layer1_rect.right < 0:
             self.kill()

@@ -18,17 +18,16 @@ def game():
 	
 	main_bg = pygame.image.load(os.path.join('bg','main.png'))
 
-	layer3 = Layer3(1,[0,100])
-	mt.add(layer3)
+	layer3 = Layer3(1,[0,70])
+	layers[0].add(layer3)
 
 	layer2 = Layer2(1,[0,190])
-	layers.add(layer2)
+	layers[1].add(layer2)
 
 	layer1 = Layer1(1,[0,230])
-	layers.add(layer1)
+	layers[2].add(layer1)
 
 	instruction = Instruction('brian')
-	
 
 	slide_value = 2
 	
@@ -45,13 +44,10 @@ def game():
 
 		display.blit(main_bg,(0,0))
 		
-		for m in mt:
-			m.update(horizontal_scroll)
-			m.draw(display) 
-		
-		for bg in layers:
-			bg.update(horizontal_scroll)
-			bg.draw(display)
+		for layer in layers:
+			for list in layer:
+				list.update(horizontal_scroll)
+				list.draw(display)
 		
 		
 		if instruction == False:

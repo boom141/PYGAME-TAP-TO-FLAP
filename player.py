@@ -1,6 +1,5 @@
-from email.mime import image
 from setup import*
-
+from sound_music import*
 
 class Player(pygame.sprite.Sprite):
     def __init__(self,current_character):
@@ -22,13 +21,15 @@ class Player(pygame.sprite.Sprite):
         self.state = 'flying'
         self.score = 0
         self.font = pygame.font.Font(os.path.join('fonts','04B_19__.TTF'),45)
+        self.sounds = -1
 
     def fly(self,delta_time):
         if self.jump_cooldown > 0:
             self.jump_cooldown -= 1
         
         if pygame.key.get_pressed()[K_SPACE] and self.hit == False:
-            if self.jump_cooldown == 0: 
+            if self.jump_cooldown == 0:
+                # Sfx_Sound('sounds/fly1.wav').play_sound(0)
                 self.free_fall = 0
                 self.vertical_momentum = self.jump_value
                 self.frame_count = 0
@@ -42,6 +43,10 @@ class Player(pygame.sprite.Sprite):
             self.jump_value = 0
             self.frame_speed = 0
             self.hit = True
+
+        if self.hit and self.sounds == -1:
+            self.sounds = 0
+            Sfx_Sound('sounds/hit.wav').play_sound(0)
 
     def update(self,delta_time):
         self.fly(delta_time)
