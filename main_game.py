@@ -4,6 +4,7 @@ from sprite_groups import*
 from environment import*
 from player import*
 from instruction_ui import*
+from game_over_ui import*
 
 def game():
 	last_time = time.time()
@@ -28,17 +29,25 @@ def game():
 	layers[2].add(layer1)
 
 	instruction = Instruction('brian')
+	game_over = Game_Over()
 
 	slide_value = 2
-	
+	action = None
+
 	while running:
 		delta_time = time.time() - last_time
 		delta_time *= 60
 		last_time = time.time()
 		
 		display.fill((25,25,25))
-		
-# slide ------------------------------  --------------------------------------------#
+
+		if action:
+			for pipe in pipes:
+				pipe.kill()
+			for ground in grounds:
+				ground.kill()
+			game()
+# slide ----------------------------------------------------------------------------#
 		horizontal_scroll = 0
 		horizontal_scroll -= slide_value * delta_time 
 
@@ -49,7 +58,6 @@ def game():
 				list.update(horizontal_scroll)
 				list.draw(display)
 		
-		
 		if instruction == False:
 			for pipe in pipes:
 				pipe.update(horizontal_scroll)
@@ -58,6 +66,8 @@ def game():
 				pipe.points(player)
 				pipe.draw(display)
 
+			if player.fly(delta_time):
+				slide_value = 0
 			player.update(delta_time)
 			player.draw(display)
 
@@ -68,6 +78,10 @@ def game():
 			instruction.draw(display,delta_time)
 			grounds.update(horizontal_scroll)
 			grounds.draw(display)
+
+		if slide_value == 0:
+			action = game_over.draw(display,player,delta_time)
+			
 		
 		if pygame.key.get_pressed()[K_SPACE]:
 			instruction = False
@@ -81,6 +95,10 @@ def game():
 				if event.key == pygame.K_ESCAPE:
 					pygame.quit()
 					sys.exit()
+			
+			if action == False:
+				pygame.quit()
+				sys.exit()
 
 		window.blit(pygame.transform.scale(display,RESOLUTION),(0,0))
 		pygame.display.update()
